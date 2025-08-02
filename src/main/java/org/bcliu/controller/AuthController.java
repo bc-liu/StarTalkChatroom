@@ -28,6 +28,7 @@ public class AuthController {
 
         //生成验证码
         String code = verificationService.genAndStoreCode(phoneNumber);
+
         //发送验证码
         String content = "【星语聊天室】您的验证码是：" + code + "，5分钟内有效";
         SmsUtil.send(phoneNumber, content);
@@ -36,22 +37,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Result register(@RequestBody Map<String, String> payload){
-        String phoneNumber = payload.get("phoneNumber");
-        String code = payload.get("code");
-        //查询用户
-        User u = userService.findByPhoneNumber(phoneNumber);
-
-        //如果查不到->注册
-        if(u == null){
-            //注册
-            //验证码校验
-            if(!verificationService.verifyCode(phoneNumber, code)){
-                return Result.error("验证码输入错误");
-            }
-
-            userService.register(phoneNumber);
+    public Result register(@RequestBody RegisterDTO registerDTO){
+        try {
+            userService.register(registerDTO);
             return Result.success();
-        }else return Result.error("您的手机号已注册过账号，请直接登录");
+        }catch (RuntimeException e){
+            return Result.error(e.getMessage());
+        }
     }
 }

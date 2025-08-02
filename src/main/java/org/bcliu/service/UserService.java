@@ -7,5 +7,5 @@ import org.bcliu.pojo.User;
 public interface UserService {
     User findByPhoneNumber(String phoneNumber);
 
-    void register(String phoneNumber);
+    void register(RegisterDTO registerDTO);
 }

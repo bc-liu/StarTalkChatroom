@@ -11,6 +11,6 @@ public interface UserMapper {
     @Select("select * from users where phone_number=#{phoneNumber}")
     User findByPhoneNumber(String phoneNumber);
 
-    @Insert("insert into users(user_type,phone_number) values (#{userType},#{phoneNumber})")
-    void add(String phoneNumber, UserType userType);
+    @Insert("insert into users(user_type,phone_number,nickname) values (#{userType},#{phoneNumber},#{nickname})")
+    void add(User user);
 }
