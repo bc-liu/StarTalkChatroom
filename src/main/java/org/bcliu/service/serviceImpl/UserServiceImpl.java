@@ -21,8 +21,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(RegisterDTO registerDTO) {
+    public void register(String phoneNumber) {
         //添加到数据库
-        userMapper.add(registerDTO.getPhoneNumber(), UserType.human);
+        userMapper.add(phoneNumber, UserType.human);
     }
 }
