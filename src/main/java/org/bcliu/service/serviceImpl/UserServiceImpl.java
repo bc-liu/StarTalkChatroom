@@ -6,9 +6,15 @@ import org.bcliu.mapper.UserMapper;
 import org.bcliu.pojo.User;
 import org.bcliu.service.UserService;
 import org.bcliu.service.VerificationService;
+import org.bcliu.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.hash.ObjectHashMapper;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -16,6 +22,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private VerificationService verificationService;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     @Override
     public User findByPhoneNumber(String phoneNumber) {
@@ -45,4 +53,32 @@ public class UserServiceImpl implements UserService {
         //添加到数据库
         userMapper.add(newU);
     }
+
+    @Override
+    public void login(RegisterDTO registerDTO) {
+        //从DTO解析数据
+        String phoneNumber = registerDTO.getPhoneNumber();
+        String code = registerDTO.getCode();
+        //判断是否注册过
+        User u = userMapper.findByPhoneNumber(phoneNumber);
+        if(u == null){
+            throw new RuntimeException("请先完成注册");
+        }
+        //校验验证码
+        if(!verificationService.verifyCode(phoneNumber, code)){
+            throw new RuntimeException("验证码错误或失效");
+        }
+        //登录
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", u.getId().longValue());
+        claims.put("phoneNumber", u.getPhoneNumber());
+        String token = JwtUtil.genToken(claims);
+        //输出token
+        System.out.println(token);
+
+        ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
+        ops.set(token, token, 1, TimeUnit.DAYS);
+    }
+
+
 }

@@ -8,4 +8,6 @@ public interface UserService {
     User findByPhoneNumber(String phoneNumber);
 
     void register(RegisterDTO registerDTO);
+
+    void login(RegisterDTO registerDTO);
 }

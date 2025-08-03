@@ -45,4 +45,14 @@ public class AuthController {
             return Result.error(e.getMessage());
         }
     }
+
+    @PostMapping("/login")
+    public Result login(@RequestBody RegisterDTO registerDTO){
+        try {
+            userService.login(registerDTO);
+            return Result.success();
+        }catch (RuntimeException e){
+            return Result.error(e.getMessage());
+        }
+    }
 }

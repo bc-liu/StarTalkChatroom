@@ -24,7 +24,7 @@ public class VerificationService {
             code.append(RANDOM.nextInt(10));
         }
         //打印验证码，用于测试校验
-        //System.out.println(code);
+        System.out.println(code);
 
         //存入redis
         String redisKey = SMS_CODE_PREFIX + phoneNumber;
