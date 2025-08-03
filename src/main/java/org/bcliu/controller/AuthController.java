@@ -7,10 +7,7 @@ import org.bcliu.service.UserService;
 import org.bcliu.service.VerificationService;
 import org.bcliu.utils.SmsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -54,5 +51,11 @@ public class AuthController {
         }catch (RuntimeException e){
             return Result.error(e.getMessage());
         }
+    }
+
+    @PostMapping("/logout")
+    public Result logout(@RequestHeader("Authorization") String token){
+        userService.logout(token);
+        return Result.success();
     }
 }

@@ -10,4 +10,6 @@ public interface UserService {
     void register(RegisterDTO registerDTO);
 
     void login(RegisterDTO registerDTO);
+
+    void logout(String token);
 }

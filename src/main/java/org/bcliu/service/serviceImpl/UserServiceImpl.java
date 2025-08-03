@@ -81,5 +81,10 @@ public class UserServiceImpl implements UserService {
         ops.set(token, token, 1, TimeUnit.DAYS);
     }
 
+    @Override
+    public void logout(String token) {
+        stringRedisTemplate.delete(token);
+    }
+
 
 }

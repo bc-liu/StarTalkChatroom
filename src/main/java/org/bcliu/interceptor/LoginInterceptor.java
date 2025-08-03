@@ -7,10 +7,12 @@ import org.bcliu.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import java.util.Map;
 
+@Component
 public class LoginInterceptor implements HandlerInterceptor {
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
