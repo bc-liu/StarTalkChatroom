@@ -76,6 +76,7 @@ public class UserServiceImpl implements UserService {
         //输出token
         System.out.println(token);
 
+        //token存入redis,有效期1day
         ValueOperations<String, String> ops = stringRedisTemplate.opsForValue();
         ops.set(token, token, 1, TimeUnit.DAYS);
     }
