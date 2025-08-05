@@ -16,3 +16,5 @@ deepseek:
     base-url: https://api.deepseek.com
     chat-endpoint: /chat/completions
     api-key: sk-a3b25bf74d3b4853870c18a6acdf17c7
+pagehelper:
+  auto-runtime-dialect: true

@@ -1,14 +1,13 @@
 package org.bcliu.controller;
 
 import org.bcliu.dto.ChannelDTO;
+import org.bcliu.pojo.Channel;
+import org.bcliu.pojo.PageBean;
 import org.bcliu.pojo.Result;
 import org.bcliu.service.ChannelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/channels")
@@ -20,5 +19,14 @@ public class ChannelController {
     public Result create(@RequestBody @Validated ChannelDTO channelDTO){
         channelService.create(channelDTO);
         return Result.success();
+    }
+
+    @GetMapping("/public")
+    public Result<PageBean<Channel>> getPublicChannelsList(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize
+    ){
+        PageBean<Channel> pb = channelService.getPublicChannels(pageNum, pageSize);
+        return Result.success(pb);
     }
 }

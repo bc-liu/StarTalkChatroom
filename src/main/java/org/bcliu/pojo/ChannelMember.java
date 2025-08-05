@@ -1,5 +1,6 @@
 package org.bcliu.pojo;
 
+import lombok.Builder;
 import lombok.Data;
 import org.bcliu.enumType.Role;
 
@@ -7,6 +8,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 public class ChannelMember {
     private BigInteger id;
     private BigInteger channelId;
