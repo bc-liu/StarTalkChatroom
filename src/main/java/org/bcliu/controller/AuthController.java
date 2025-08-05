@@ -2,9 +2,8 @@ package org.bcliu.controller;
 
 import org.bcliu.dto.RegisterDTO;
 import org.bcliu.pojo.Result;
-import org.bcliu.pojo.User;
 import org.bcliu.service.UserService;
-import org.bcliu.service.VerificationService;
+import org.bcliu.service.serviceImpl.VerificationService;
 import org.bcliu.utils.SmsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +19,7 @@ public class AuthController {
     private VerificationService verificationService;
 
     @PostMapping("/sendCode")
-    public Result sendCode(@RequestBody Map<String, String> payload){
+    public Result sendCode(@RequestBody Map<String, String> payload) {
         String phoneNumber = payload.get("phoneNumber");
 
         //生成验证码
@@ -34,27 +33,27 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public Result register(@RequestBody RegisterDTO registerDTO){
+    public Result register(@RequestBody RegisterDTO registerDTO) {
         try {
             userService.register(registerDTO);
             return Result.success();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return Result.error(e.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public Result login(@RequestBody RegisterDTO registerDTO){
+    public Result login(@RequestBody RegisterDTO registerDTO) {
         try {
             userService.login(registerDTO);
             return Result.success();
-        }catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return Result.error(e.getMessage());
         }
     }
 
     @PostMapping("/logout")
-    public Result logout(@RequestHeader("Authorization") String token){
+    public Result logout(@RequestHeader("Authorization") String token) {
         userService.logout(token);
         return Result.success();
     }

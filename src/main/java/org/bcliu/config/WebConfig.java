@@ -17,7 +17,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .excludePathPatterns(
                         "/api/auth/sendCode",
                         "/api/auth/register",
-                        "/api/auth/login"
+                        "/api/auth/login",
+                        "/test-ai"
                 );
     }
 }

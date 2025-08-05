@@ -1,6 +1,7 @@
 package org.bcliu.service;
 
 import org.bcliu.dto.RegisterDTO;
+import org.bcliu.dto.UserInfoDTO;
 import org.bcliu.enumType.UserType;
 import org.bcliu.pojo.User;
 
@@ -12,4 +13,5 @@ public interface UserService {
     void login(RegisterDTO registerDTO);
 
     void logout(String token);
+
 }
