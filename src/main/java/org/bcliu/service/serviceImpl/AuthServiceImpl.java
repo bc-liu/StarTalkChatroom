@@ -4,7 +4,7 @@ import org.bcliu.dto.RegisterDTO;
 import org.bcliu.enumType.UserType;
 import org.bcliu.mapper.UserMapper;
 import org.bcliu.pojo.User;
-import org.bcliu.service.UserService;
+import org.bcliu.service.AuthService;
 import org.bcliu.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class AuthServiceImpl implements AuthService {
     @Autowired
     private UserMapper userMapper;
     @Autowired

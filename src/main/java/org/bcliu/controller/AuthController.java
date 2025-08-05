@@ -2,7 +2,7 @@ package org.bcliu.controller;
 
 import org.bcliu.dto.RegisterDTO;
 import org.bcliu.pojo.Result;
-import org.bcliu.service.UserService;
+import org.bcliu.service.AuthService;
 import org.bcliu.service.serviceImpl.VerificationService;
 import org.bcliu.utils.SmsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +14,7 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
     @Autowired
-    private UserService userService;
+    private AuthService userService;
     @Autowired
     private VerificationService verificationService;
 
