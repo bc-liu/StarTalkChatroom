@@ -37,6 +37,7 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
         ChannelMember channelMember = ChannelMember.builder()
                 .channelId(BigInteger.valueOf(channelId))
                 .userId(BigInteger.valueOf(uid))
+                .role(Role.member)
                 .build();
         //该用户已加入频道，则拒绝重复加入
         if(channelMemberMapper.find(channelId, uid) != null){
@@ -77,6 +78,9 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
 
         //检查管理员或创建者权限，如没有则操作失败
         ChannelMember operator = channelMemberMapper.find(channelId, opsId);
+        if(operator == null){//操作者非空判断
+            throw new RuntimeException("非本频道成员不能进行此操作");
+        }
         if(operator.getRole() != Role.admin && operator.getRole() != Role.creator){
             throw new RuntimeException("您不具备踢出该频道成员的权限");
         }
