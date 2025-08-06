@@ -38,8 +38,26 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
                 .userId(BigInteger.valueOf(uid))
                 .build();
         //该用户已加入频道，则拒绝重复加入
-        //todo
+        if(channelMemberMapper.findByUid(uid) != null){
+            throw new RuntimeException("请勿重复加入频道");
+        }
         //添加到数据库
         channelMemberMapper.join(channelMember);
+    }
+
+    @Override
+    public void leave(Long channelId) {
+        //根据id获取频道
+        Channel channel = channelMapper.findById(channelId);
+        //获取当前用户id
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Object uidObj = map.get("id");
+        Long uid = ((Number) uidObj).longValue();
+        //用户不在当前频道,拒绝删除
+        if(channelMemberMapper.findByUid(uid) == null){
+            throw new RuntimeException("您不是该频道成员");
+        }
+        //删除数据库中成员
+        channelMemberMapper.leave(uid);
     }
 }

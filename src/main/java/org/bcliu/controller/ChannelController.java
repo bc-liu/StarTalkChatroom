@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class ChannelController {
     @Autowired
     private ChannelService channelService;
-    @Autowired
-    private ChannelMemberService channelMemberService;
 
     @PostMapping("/")
     public Result create(@RequestBody @Validated ChannelDTO channelDTO){
@@ -33,13 +31,4 @@ public class ChannelController {
         return Result.success(pb);
     }
 
-    @PostMapping("/{channelId}/join")
-    public Result join(@PathVariable Long channelId){
-        try {
-            channelMemberService.join(channelId);
-            return Result.success();
-        }catch (RuntimeException e){
-            return Result.error(e.getMessage());
-        }
-    }
 }
