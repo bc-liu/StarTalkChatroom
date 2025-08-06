@@ -2,6 +2,7 @@ package org.bcliu.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.bcliu.pojo.Channel;
 
@@ -11,6 +12,7 @@ import java.util.List;
 public interface ChannelMapper {
 
     @Insert("insert into channels(name,creator_id,is_public) values (#{name},#{creatorId},#{isPublic})")
+    @Options(useGeneratedKeys = true, keyProperty = "id")
     void create(Channel channel);
 
     @Select("select * from channels where is_public=1 order by update_time desc")

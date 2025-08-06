@@ -1,5 +1,6 @@
 package org.bcliu.service.serviceImpl;
 
+import org.bcliu.enumType.Role;
 import org.bcliu.mapper.ChannelMapper;
 import org.bcliu.mapper.ChannelMemberMapper;
 import org.bcliu.pojo.Channel;
@@ -38,7 +39,7 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
                 .userId(BigInteger.valueOf(uid))
                 .build();
         //该用户已加入频道，则拒绝重复加入
-        if(channelMemberMapper.findByUid(uid) != null){
+        if(channelMemberMapper.find(channelId, uid) != null){
             throw new RuntimeException("请勿重复加入频道");
         }
         //添加到数据库
@@ -54,10 +55,46 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
         Object uidObj = map.get("id");
         Long uid = ((Number) uidObj).longValue();
         //用户不在当前频道,拒绝删除
-        if(channelMemberMapper.findByUid(uid) == null){
+        if(channelMemberMapper.find(channelId, uid) == null){
             throw new RuntimeException("您不是该频道成员");
         }
         //删除数据库中成员
-        channelMemberMapper.leave(uid);
+        ChannelMember channelMember = ChannelMember.builder()
+                .channelId(BigInteger.valueOf(channelId))
+                .userId(BigInteger.valueOf(uid))
+                .build();
+        channelMemberMapper.leave(channelMember);
+    }
+
+    @Override
+    public void kick(Long channelId, Long userId) {
+        //根据id获取频道
+        Channel channel = channelMapper.findById(channelId);
+        //获取当前操作用户id
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Object opsObj = map.get("id");
+        Long opsId = ((Number) opsObj).longValue();
+
+        //检查管理员或创建者权限，如没有则操作失败
+        ChannelMember operator = channelMemberMapper.find(channelId, opsId);
+        if(operator.getRole() != Role.admin && operator.getRole() != Role.creator){
+            throw new RuntimeException("您不具备踢出该频道成员的权限");
+        }
+        //拟踢成员对象
+        ChannelMember targetMember = channelMemberMapper.find(channelId, userId);
+        //该成员不存在，无法踢出
+        if(targetMember == null){
+            throw new RuntimeException("该成员不存在");
+        }
+        //无法踢出自己
+        if(operator.getId().longValue() == targetMember.getId().longValue()){
+            throw new RuntimeException("无法进行该操作");
+        }
+        //管理员无法踢出管理员和创建者
+        if(operator.getRole() == Role.admin && (targetMember.getRole() == Role.creator || targetMember.getRole() == Role.admin)){
+            throw new RuntimeException("您不具备踢出该频道成员的权限");
+        }
+        //从数据库删除被踢成员
+        channelMemberMapper.leave(targetMember);
     }
 }

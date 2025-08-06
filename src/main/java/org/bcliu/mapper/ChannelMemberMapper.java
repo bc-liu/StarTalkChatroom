@@ -10,12 +10,12 @@ import org.bcliu.pojo.User;
 @Mapper
 public interface ChannelMemberMapper {
 
-    @Insert("insert into channel_members(channel_id,user_id) values (#{channelId},#{userId})")
+    @Insert("insert into channel_members(channel_id,user_id,role) values (#{channelId},#{userId},#{role})")
     void join(ChannelMember channelMember);
 
-    @Select("select * from channel_members where user_id=#{uid}")
-    ChannelMember findByUid(Long uid);
+    @Select("select * from channel_members where channel_id=#{channelId} and user_id=#{userId}")
+    ChannelMember find(Long channelId, Long userId);
 
-    @Delete("delete from channel_members where user_id=#{uid}")
-    void leave(Long uid);
+    @Delete("delete from channel_members where channel_id=#{channelId} and user_id=#{userId}")
+    void leave(ChannelMember channelMember);
 }

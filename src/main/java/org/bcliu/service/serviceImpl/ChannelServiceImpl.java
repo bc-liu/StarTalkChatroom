@@ -3,8 +3,11 @@ package org.bcliu.service.serviceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.bcliu.dto.ChannelDTO;
+import org.bcliu.enumType.Role;
 import org.bcliu.mapper.ChannelMapper;
+import org.bcliu.mapper.ChannelMemberMapper;
 import org.bcliu.pojo.Channel;
+import org.bcliu.pojo.ChannelMember;
 import org.bcliu.pojo.PageBean;
 import org.bcliu.service.ChannelService;
 import org.bcliu.utils.ThreadLocalUtil;
@@ -20,6 +23,8 @@ import java.util.Map;
 public class ChannelServiceImpl implements ChannelService {
     @Autowired
     private ChannelMapper channelMapper;
+    @Autowired
+    private ChannelMemberMapper channelMemberMapper;
 
     @Override
     public void create(ChannelDTO channelDTO) {
@@ -42,6 +47,15 @@ public class ChannelServiceImpl implements ChannelService {
                     .build();
             //存到数据库
             channelMapper.create(channel);
+
+            //添加创建者到表channel_member,设置身份为creator
+            ChannelMember channelMember = ChannelMember.builder()
+                    .channelId(channel.getId())
+                    .userId(BigInteger.valueOf(numId.longValue()))
+                    .role(Role.creator)
+                    .build();
+            channelMemberMapper.join(channelMember);
+
         }else throw new RuntimeException("ChannelServiceImpl internal error: 数字类型不匹配");
 
     }

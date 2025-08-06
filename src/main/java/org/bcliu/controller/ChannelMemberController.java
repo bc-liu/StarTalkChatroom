@@ -33,4 +33,14 @@ public class ChannelMemberController {
             return Result.error(e.getMessage());
         }
     }
+
+    @PostMapping("/{channelId}/members/{userId}")
+    public Result kick(@PathVariable Long channelId, @PathVariable Long userId){
+        try {
+            channelMemberService.kick(channelId, userId);
+            return Result.success();
+        }catch (RuntimeException e){
+            return Result.error(e.getMessage());
+        }
+    }
 }
