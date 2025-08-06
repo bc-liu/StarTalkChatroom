@@ -15,4 +15,7 @@ public interface ChannelMapper {
 
     @Select("select * from channels where is_public=1 order by update_time desc")
     List<Channel> findPublicChannels();
+
+    @Select("select * from channels where id=#{channelId};")
+    Channel findById(Long channelId);
 }

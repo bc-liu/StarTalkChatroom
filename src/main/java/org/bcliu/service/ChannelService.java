@@ -1,5 +1,6 @@
 package org.bcliu.service;
 
+import org.apache.ibatis.annotations.Select;
 import org.bcliu.dto.ChannelDTO;
 import org.bcliu.pojo.Channel;
 import org.bcliu.pojo.PageBean;

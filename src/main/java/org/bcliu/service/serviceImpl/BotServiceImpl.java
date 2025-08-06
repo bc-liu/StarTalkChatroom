@@ -22,7 +22,7 @@ public class BotServiceImpl implements BotService {
     @Autowired
     private BotMapper botMapper;
     @Autowired
-    private ChannelMapper channelMapper;
+    private ChannelMemberMapper channelMemberMapper;
     @Autowired
     private UserMapper userMapper;
 
@@ -54,6 +54,6 @@ public class BotServiceImpl implements BotService {
                 .userId(botU.getId())
                 .build();
 
-        ChannelMemberMapper.add(botMember);
+        channelMemberMapper.join(botMember);
     }
 }
