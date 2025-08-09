@@ -47,13 +47,23 @@ public class ChannelMemberController {
         }
     }
 
-    @PatchMapping("/{channelId}/members/{userId}/mute")
+    @PostMapping("/{channelId}/members/{userId}/mute")
     public Result mute(@PathVariable Long channelId, @PathVariable Long userId, @RequestBody @Validated MuteRequestDTO muteRequestDTO){
         Map<String, Object> map = ThreadLocalUtil.get();
         Object idObj = map.get("id");
         Long operatorId = ((Number) idObj).longValue();
 
         channelMemberService.mute(channelId, operatorId, userId, muteRequestDTO);
+        return Result.success();
+    }
+
+    @DeleteMapping("/{channelId}/members/{userId}/mute")
+    public Result dismute(@PathVariable Long channelId, @PathVariable Long userId){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Object idObj = map.get("id");
+        Long operatorId = ((Number) idObj).longValue();
+
+        channelMemberService.dismute(channelId, operatorId, userId);
         return Result.success();
     }
 }

@@ -126,11 +126,31 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
         }
         //管理员无法禁言管理员和创建者
         if(operator.getRole() == Role.admin && (targetMember.getRole() == Role.creator || targetMember.getRole() == Role.admin)){
-            throw new RuntimeException("您不具备踢出该频道成员的权限");
+            throw new RuntimeException("您不具备禁言该频道成员的权限");
         }
         //计算禁言结束时间
         LocalDateTime mutedUntil = LocalDateTime.now().plusMinutes(muteRequestDTO.getDurationInMinutes());
         //操作数据库
         channelMemberMapper.mute(targetMember, mutedUntil);
+    }
+
+    @Override
+    public void dismute(Long channelId, Long operatorId, Long userId) {
+        //无管理员或创建者权限，则操作失败
+        ChannelMember operator = channelMemberMapper.find(channelId, operatorId);
+        if(operator == null){//操作者非空判断
+            throw new RuntimeException("非本频道成员不能进行此操作");
+        }
+        if(operator.getRole() != Role.admin && operator.getRole() != Role.creator){
+            throw new RuntimeException("您不具备解除禁言该频道成员的权限");
+        }
+        //拟解除禁言成员对象
+        ChannelMember targetMember = channelMemberMapper.find(channelId, userId);
+        //该成员不存在，无法解除禁言
+        if(targetMember == null){
+            throw new RuntimeException("该成员不存在");
+        }
+        //操作数据库
+        channelMemberMapper.dismute(targetMember);
     }
 }
