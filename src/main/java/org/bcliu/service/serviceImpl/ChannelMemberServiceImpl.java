@@ -1,5 +1,6 @@
 package org.bcliu.service.serviceImpl;
 
+import org.bcliu.dto.MuteRequestDTO;
 import org.bcliu.enumType.Role;
 import org.bcliu.mapper.ChannelMapper;
 import org.bcliu.mapper.ChannelMemberMapper;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Service
@@ -100,5 +102,35 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
         }
         //从数据库删除被踢成员
         channelMemberMapper.leave(targetMember);
+    }
+
+    @Override
+    public void mute(Long channelId, Long operatorId, Long userId, MuteRequestDTO muteRequestDTO) {
+        //无管理员或创建者权限，则操作失败
+        ChannelMember operator = channelMemberMapper.find(channelId, operatorId);
+        if(operator == null){//操作者非空判断
+            throw new RuntimeException("非本频道成员不能进行此操作");
+        }
+        if(operator.getRole() != Role.admin && operator.getRole() != Role.creator){
+            throw new RuntimeException("您不具备禁言该频道成员的权限");
+        }
+        //拟禁言成员对象
+        ChannelMember targetMember = channelMemberMapper.find(channelId, userId);
+        //该成员不存在，无法禁言
+        if(targetMember == null){
+            throw new RuntimeException("该成员不存在");
+        }
+        //无法禁言自己
+        if(operator.getId().longValue() == targetMember.getId().longValue()){
+            throw new RuntimeException("无法进行该操作");
+        }
+        //管理员无法禁言管理员和创建者
+        if(operator.getRole() == Role.admin && (targetMember.getRole() == Role.creator || targetMember.getRole() == Role.admin)){
+            throw new RuntimeException("您不具备踢出该频道成员的权限");
+        }
+        //计算禁言结束时间
+        LocalDateTime mutedUntil = LocalDateTime.now().plusMinutes(muteRequestDTO.getDurationInMinutes());
+        //操作数据库
+        channelMemberMapper.mute(targetMember, mutedUntil);
     }
 }

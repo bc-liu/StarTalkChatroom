@@ -1,11 +1,11 @@
 package org.bcliu.mapper;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
+import org.bcliu.dto.MuteRequestDTO;
 import org.bcliu.pojo.ChannelMember;
 import org.bcliu.pojo.User;
+
+import java.time.LocalDateTime;
 
 @Mapper
 public interface ChannelMemberMapper {
@@ -18,4 +18,7 @@ public interface ChannelMemberMapper {
 
     @Delete("delete from channel_members where channel_id=#{channelId} and user_id=#{userId}")
     void leave(ChannelMember channelMember);
+
+    @Update("update channel_members set is_muted=true,muted_until=#{mutedUntil} where channel_id=#{targetMember.channelId} and user_id=#{targetMember.userId}")
+    void mute(ChannelMember targetMember, LocalDateTime mutedUntil);
 }
