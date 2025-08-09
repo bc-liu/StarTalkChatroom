@@ -66,4 +66,24 @@ public class ChannelMemberController {
         channelMemberService.dismute(channelId, operatorId, userId);
         return Result.success();
     }
+
+    @PostMapping("/{channelId}/members/{userId}/admin")
+    public Result setAdmin(@PathVariable Long channelId, @PathVariable Long userId){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Object idObj = map.get("id");
+        Long operatorId = ((Number) idObj).longValue();
+
+        channelMemberService.setAdmin(channelId, userId, operatorId);
+        return Result.success();
+    }
+
+    @DeleteMapping("/{channelId}/members/{userId}/admin")
+    public Result disAdmin(@PathVariable Long channelId, @PathVariable Long userId){
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Object idObj = map.get("id");
+        Long operatorId = ((Number) idObj).longValue();
+
+        channelMemberService.disAdmin(channelId, userId, operatorId);
+        return Result.success();
+    }
 }

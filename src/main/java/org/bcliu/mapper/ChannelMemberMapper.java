@@ -24,4 +24,10 @@ public interface ChannelMemberMapper {
 
     @Update("update channel_members set is_muted=false where channel_id=#{channelId} and user_id=#{userId}")
     void dismute(ChannelMember targetMember);
+
+    @Update("update channel_members set role=#{role} where channel_id=#{channelId} and user_id=#{userId}")
+    void setAdmin(ChannelMember targetMember);
+
+    @Update("update channel_members set role=#{role} where channel_id=#{channelId} and user_id=#{userId}")
+    void disAdmin(ChannelMember targetMember);
 }

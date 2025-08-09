@@ -12,4 +12,8 @@ public interface ChannelMemberService {
     void mute(Long channelId, Long operatorId, Long userId, MuteRequestDTO muteRequestDTO);
 
     void dismute(Long channelId, Long operatorId, Long userId);
+
+    void setAdmin(Long channelId, Long userId, Long operatorId);
+
+    void disAdmin(Long channelId, Long userId, Long operatorId);
 }

@@ -153,4 +153,58 @@ public class ChannelMemberServiceImpl implements ChannelMemberService {
         //操作数据库
         channelMemberMapper.dismute(targetMember);
     }
+
+    @Override
+    public void setAdmin(Long channelId, Long userId, Long operatorId) {
+        ChannelMember operator = channelMemberMapper.find(channelId, operatorId);
+        ChannelMember targetMember = channelMemberMapper.find(channelId, userId);
+
+        if(operator == null){//操作者非空判断
+            throw new RuntimeException("非本频道成员不能进行此操作");
+        }
+        //该成员不存在，无法设置管理员
+        if(targetMember == null){
+            throw new RuntimeException("该成员不存在");
+        }
+
+        //无法设置自己为管理员
+        if(operator.getId().longValue() == targetMember.getId().longValue()){
+            throw new RuntimeException("无法进行该操作");
+        }
+        //操作者不是创建者，则操作失败
+        if(operator.getRole() != Role.creator){
+            throw new RuntimeException("您不具备设置管理员的权限");
+        }
+        //设置管理员
+        targetMember.setRole(Role.admin);
+        //操作数据库
+        channelMemberMapper.setAdmin(targetMember);
+    }
+
+    @Override
+    public void disAdmin(Long channelId, Long userId, Long operatorId) {
+        ChannelMember operator = channelMemberMapper.find(channelId, operatorId);
+        ChannelMember targetMember = channelMemberMapper.find(channelId, userId);
+
+        if(operator == null){//操作者非空判断
+            throw new RuntimeException("非本频道成员不能进行此操作");
+        }
+        //该成员不存在，无法取消管理员
+        if(targetMember == null){
+            throw new RuntimeException("该成员不存在");
+        }
+
+        //无法取消自己管理员
+        if(operator.getId().longValue() == targetMember.getId().longValue()){
+            throw new RuntimeException("无法进行该操作");
+        }
+        //操作者不是创建者，则操作失败
+        if(operator.getRole() != Role.creator){
+            throw new RuntimeException("您不具备取消管理员的权限");
+        }
+        //取消管理员
+        targetMember.setRole(Role.member);
+        //操作数据库
+        channelMemberMapper.disAdmin(targetMember);
+    }
 }
