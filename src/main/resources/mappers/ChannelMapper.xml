@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.bcliu.mapper.ChannelMapper">
+    <select id="findJoinedChannelsByUserId" resultType="org.bcliu.pojo.Channel">
+        select
+            c.* from
+            channels c
+        join
+            channel_members cm on c.id = cm.channel_id
+        where
+            cm.user_id = #{userId}
+    </select>
+</mapper>

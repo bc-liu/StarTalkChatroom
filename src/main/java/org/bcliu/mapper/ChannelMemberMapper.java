@@ -2,10 +2,12 @@ package org.bcliu.mapper;
 
 import org.apache.ibatis.annotations.*;
 import org.bcliu.dto.MuteRequestDTO;
+import org.bcliu.pojo.Channel;
 import org.bcliu.pojo.ChannelMember;
 import org.bcliu.pojo.User;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Mapper
 public interface ChannelMemberMapper {
@@ -30,4 +32,7 @@ public interface ChannelMemberMapper {
 
     @Update("update channel_members set role=#{role} where channel_id=#{channelId} and user_id=#{userId}")
     void disAdmin(ChannelMember targetMember);
+
+    @Select("select channel_id from channel_members where user_id=#{id}")
+    List<Long> getChannelIdsByUserId(Long id);
 }

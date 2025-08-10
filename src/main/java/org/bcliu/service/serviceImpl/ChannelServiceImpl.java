@@ -6,9 +6,11 @@ import org.bcliu.dto.ChannelDTO;
 import org.bcliu.enumType.Role;
 import org.bcliu.mapper.ChannelMapper;
 import org.bcliu.mapper.ChannelMemberMapper;
+import org.bcliu.mapper.UserMapper;
 import org.bcliu.pojo.Channel;
 import org.bcliu.pojo.ChannelMember;
 import org.bcliu.pojo.PageBean;
+import org.bcliu.pojo.User;
 import org.bcliu.service.ChannelService;
 import org.bcliu.utils.ThreadLocalUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +70,21 @@ public class ChannelServiceImpl implements ChannelService {
 
         List<Channel> publicChannels = channelMapper.findPublicChannels();
         Page<Channel> page = (Page<Channel>) publicChannels;
+
+        return new PageBean<>(page.getTotal(), page.getResult());
+    }
+
+    @Override
+    public PageBean<Channel> getJoinedChannels(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum, pageSize);
+
+        Map<String, Object> map = ThreadLocalUtil.get();
+        Object idObj = map.get("id");
+        Long id = ((Number) idObj).longValue();
+
+        List<Channel> joinedChannels = channelMapper.findJoinedChannelsByUserId(id);
+
+        Page<Channel> page = (Page<Channel>) joinedChannels;
 
         return new PageBean<>(page.getTotal(), page.getResult());
     }

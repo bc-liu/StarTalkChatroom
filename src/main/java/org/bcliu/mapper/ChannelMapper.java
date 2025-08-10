@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
 import org.bcliu.pojo.Channel;
+import org.bcliu.pojo.User;
 
 import java.util.List;
 
@@ -20,4 +21,6 @@ public interface ChannelMapper {
 
     @Select("select * from channels where id=#{channelId};")
     Channel findById(Long channelId);
+
+    List<Channel> findJoinedChannelsByUserId(Long userId);
 }

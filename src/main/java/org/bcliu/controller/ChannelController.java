@@ -1,6 +1,7 @@
 package org.bcliu.controller;
 
 import org.bcliu.dto.ChannelDTO;
+import org.bcliu.dto.ChannelDetailDTO;
 import org.bcliu.pojo.Channel;
 import org.bcliu.pojo.PageBean;
 import org.bcliu.pojo.Result;
@@ -31,4 +32,22 @@ public class ChannelController {
         return Result.success(pb);
     }
 
+    @GetMapping("/joined")
+    public Result<PageBean<Channel>> getJoinedChannelsList(
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize
+    ){
+        PageBean<Channel> pb = channelService.getJoinedChannels(pageNum, pageSize);
+        return Result.success(pb);
+    }
+
+    @GetMapping("/created")
+    public Result<PageBean<Channel>> getCreatedChannelList(){
+        return null;
+    }
+
+    @GetMapping("/{channelId}")
+    public Result<ChannelDetailDTO> details(){
+        return null;
+    }
 }
