@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.bcliu.mapper.MessageMapper">
+    <select id="history" resultType="org.bcliu.dto.MessageDetailDTO">
+        select
+            m.id,
+            m.content_type,
+            m.content,
+            m.metadata,
+            m.create_time,
+            u.id as senderId,
+            u.nickname as senderNickname,
+            u.avatar_url as senderAvatarUrl
+        from
+            messages m
+        join
+            users u on m.sender_id = u.id
+        where
+            m.channel_id=#{channelId}
+    </select>
+</mapper>
