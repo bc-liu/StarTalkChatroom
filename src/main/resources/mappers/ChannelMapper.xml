@@ -13,4 +13,39 @@
         where
             cm.user_id = #{userId}
     </select>
+    
+    <select id="getChannelMemberDetails" resultType="org.bcliu.dto.ChannelMemberDetailDTO">
+        select
+            cm.user_id as userId,
+            u.user_type as userType,
+            u.nickname as nickname,
+            u.avatar_url as avatarUrl,
+            cm.role as role,
+            cm.is_muted as isMuted,
+            cm.create_time as createTime
+        from
+            channel_members cm
+        join
+            users u on cm.user_id = u.id
+        where
+            cm.channel_id = #{channelId}
+    </select>
+    
+    <select id="getMessageDetails" resultType="org.bcliu.dto.MessageDetailDTO">
+        select
+            m.id as id,
+            m.content_type,
+            m.content,
+            m.metadata,
+            m.create_time,
+            u.id as senderId,
+            u.nickname as senderNickname,
+            u.avatarUrl as senderAvatarUrl
+        from
+            messages m
+        join
+            users u on u.id = m.sender_id
+        where
+            m.channel_id = #{channelId}
+    </select>
 </mapper>

@@ -41,13 +41,16 @@ public class ChannelController {
         return Result.success(pb);
     }
 
-    @GetMapping("/created")
-    public Result<PageBean<Channel>> getCreatedChannelList(){
-        return null;
-    }
-
     @GetMapping("/{channelId}")
-    public Result<ChannelDetailDTO> details(){
-        return null;
+    public Result<ChannelDetailDTO> details(
+            @PathVariable Long channelId,
+            @RequestParam(defaultValue = "1") Integer pageNum,
+            @RequestParam(defaultValue = "10") Integer pageSize
+    ) {
+        try {
+            return Result.success(channelService.details(channelId, pageNum, pageSize));
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 }

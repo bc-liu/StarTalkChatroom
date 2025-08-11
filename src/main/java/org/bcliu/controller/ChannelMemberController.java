@@ -49,41 +49,57 @@ public class ChannelMemberController {
 
     @PostMapping("/{channelId}/members/{userId}/mute")
     public Result mute(@PathVariable Long channelId, @PathVariable Long userId, @RequestBody @Validated MuteRequestDTO muteRequestDTO){
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Object idObj = map.get("id");
-        Long operatorId = ((Number) idObj).longValue();
+        try {
+            Map<String, Object> map = ThreadLocalUtil.get();
+            Object idObj = map.get("id");
+            Long operatorId = ((Number) idObj).longValue();
 
-        channelMemberService.mute(channelId, operatorId, userId, muteRequestDTO);
-        return Result.success();
+            channelMemberService.mute(channelId, operatorId, userId, muteRequestDTO);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{channelId}/members/{userId}/mute")
     public Result dismute(@PathVariable Long channelId, @PathVariable Long userId){
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Object idObj = map.get("id");
-        Long operatorId = ((Number) idObj).longValue();
+        try {
+            Map<String, Object> map = ThreadLocalUtil.get();
+            Object idObj = map.get("id");
+            Long operatorId = ((Number) idObj).longValue();
 
-        channelMemberService.dismute(channelId, operatorId, userId);
-        return Result.success();
+            channelMemberService.dismute(channelId, operatorId, userId);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 
     @PostMapping("/{channelId}/members/{userId}/admin")
     public Result setAdmin(@PathVariable Long channelId, @PathVariable Long userId){
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Object idObj = map.get("id");
-        Long operatorId = ((Number) idObj).longValue();
+        try {
+            Map<String, Object> map = ThreadLocalUtil.get();
+            Object idObj = map.get("id");
+            Long operatorId = ((Number) idObj).longValue();
 
-        channelMemberService.setAdmin(channelId, userId, operatorId);
-        return Result.success();
+            channelMemberService.setAdmin(channelId, userId, operatorId);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 
     @DeleteMapping("/{channelId}/members/{userId}/admin")
     public Result disAdmin(@PathVariable Long channelId, @PathVariable Long userId){
-        Map<String, Object> map = ThreadLocalUtil.get();
-        Object idObj = map.get("id");
-        Long operatorId = ((Number) idObj).longValue();
+        try {
+            Map<String, Object> map = ThreadLocalUtil.get();
+            Object idObj = map.get("id");
+            Long operatorId = ((Number) idObj).longValue();
 
-        channelMemberService.disAdmin(channelId, userId, operatorId);
-        return Result.success();
+            channelMemberService.disAdmin(channelId, userId, operatorId);
+            return Result.success();
+        } catch (Exception e) {
+            return Result.error(e.getMessage());
+        }
     }
 }

@@ -4,8 +4,10 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Options;
 import org.apache.ibatis.annotations.Select;
+import org.bcliu.dto.ChannelDetailDTO;
+import org.bcliu.dto.ChannelMemberDetailDTO;
+import org.bcliu.dto.MessageDetailDTO;
 import org.bcliu.pojo.Channel;
-import org.bcliu.pojo.User;
 
 import java.util.List;
 
@@ -19,8 +21,12 @@ public interface ChannelMapper {
     @Select("select * from channels where is_public=1 order by update_time desc")
     List<Channel> findPublicChannels();
 
-    @Select("select * from channels where id=#{channelId};")
+    @Select("select * from channels where id=#{channelId}")
     Channel findById(Long channelId);
 
     List<Channel> findJoinedChannelsByUserId(Long userId);
+
+    List<ChannelMemberDetailDTO> getChannelMemberDetails(Long channelId);
+
+    List<MessageDetailDTO> getMessageDetails(Long channelId);
 }
